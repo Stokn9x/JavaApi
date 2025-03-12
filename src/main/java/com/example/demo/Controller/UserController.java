@@ -2,15 +2,13 @@ package com.example.demo.Controller;
 
 import com.example.demo.Model.User;
 import com.example.demo.Service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*") //Har lavet cors her
 public class UserController {
 
     private UserService userService;
@@ -27,4 +25,11 @@ public class UserController {
         }
         return null;
     }
+
+    @GetMapping("/login")
+    public String login(@RequestParam String email, @RequestParam String password) {
+        Optional<User> user = userService.authenticate(email, password);
+        return user.isPresent() ? "Login successful! Welcome, " + user.get().getName() : "Invalid credentials";
+    }
+
 }
